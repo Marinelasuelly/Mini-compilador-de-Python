@@ -42,4 +42,3 @@ relacoesEntreExpressoes:
 	expr (EQ | NEQ | GT | LT | GTE | LTE) expr;
 
 queryEntreParenteses: LPAREN query RPAREN;
-git status
