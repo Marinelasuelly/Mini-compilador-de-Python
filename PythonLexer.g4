@@ -62,8 +62,9 @@ MULT_ASSIGN: '*=';
 DIV_ASSIGN: '/=';
 ASSIGN: '=';
 
-LBRACK: '[';
-RBRACK: ']';
+// Ajustado para bater certo com os nomes da Fase 8
+LBRACKET: '[';
+RBRACKET: ']';
 LBRACE: '{';
 RBRACE: '}';
 LPAREN: '(';
@@ -72,23 +73,21 @@ COMMA: ',';
 COLON: ':';
 DOT: '.';
 
-// ========================================== 3. LITERAIS (Float primeiro para evitar mascaramento)
+// ========================================== 3. LITERAIS E ESTRUTURAS DE DADOS
 // ==========================================
 
 FLOAT_NUMBER: [0-9]+ '.' [0-9]+;
 INT_NUMBER: [0-9]+;
 
+// Regra robusta de STRING que suporta caracteres de escape (ex: \n, \t)
 STRING:
 	'"' (~["\\] | '\\' .)* '"'
 	| '\'' (~['\\] | '\\' .)* '\'';
 
-// ========================================== 4. CONTROLADORES DE FLUXO
+// ========================================== 4. CONTROLADORES DE FLUXO E IDENTIFICADORES
 // ==========================================
 
 NEWLINE: '\r'? '\n';
-
-// ========================================== REQUISITO OBRIGATÓRIO (Encerramento do Arquivo)
-// ==========================================
 
 ID: LETTER (LETTER | DIGIT)*;
 

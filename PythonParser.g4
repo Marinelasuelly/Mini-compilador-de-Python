@@ -8,9 +8,7 @@ options {
 // ==========================================
 
 /**
- * Ponto de entrada do mini-compilador (Atualizado para a Fase 7).
- Permite instruções,
- * condicionais, funções, chamadas, loops ou quebras de linha.
+ * Ponto de entrada do mini-compilador (Atualizado para a Fase 8).
  */
 code: (
 		stat
@@ -32,35 +30,32 @@ stat: (return_stmt | atribuicao | expr | query) NEWLINE;
  */
 atribuicao: ID ASSIGN expr;
 
-// ========================================== 2. ESTRUTURAS DE REPETIÇÃO / LOOPS (FASE 7)
+// ========================================== 2. ESTRUTURAS DE DADOS / COLECÕES (FASE 8)
 // ==========================================
 
-/**
- * Estrutura de repetição while: while condicao:
- */
-loop_while: WHILE query COLON NEWLINE stat+;
+lista: LBRACKET (expr (COMMA expr)*)? RBRACKET;
+tupla: LPAREN (expr (COMMA expr)*)? RPAREN;
+conjunto: LBRACE (expr (COMMA expr)*)? RBRACE;
+dicionario:
+	LBRACE (par_chave_valor (COMMA par_chave_valor)*)? RBRACE;
+par_chave_valor: expr COLON expr;
 
-/**
- * Estrutura de repetição for simplificada: for i in range(x): ou for i in lista:
- Aceita uma query
- * ou uma expressão geral após a keyword IN.
- */
+// ========================================== 3. ESTRUTURAS DE REPETIÇÃO / LOOPS (FASE 7)
+// ==========================================
+
+loop_while: WHILE query COLON NEWLINE stat+;
 loop_for: FOR ID IN expr COLON NEWLINE stat+;
 
-// ========================================== 3. ESTRUTURAS DE FUNÇÕES (FASE 6)
+// ========================================== 4. ESTRUTURAS DE FUNÇÕES (FASE 6)
 // ==========================================
 
 func: DEF ID LPAREN parametros? RPAREN COLON NEWLINE stat+;
-
 parametros: ID (COMMA ID)*;
-
 func_call: ID LPAREN argumentos? RPAREN;
-
 argumentos: expr (COMMA expr)*;
-
 return_stmt: RETURN expr;
 
-// ========================================== 4. ESTRUTURAS CONDICIONAIS (FASE 5)
+// ========================================== 5. ESTRUTURAS CONDICIONAIS (FASE 5)
 // ==========================================
 
 condicional:
@@ -72,12 +67,17 @@ condicionalElif: ELIF query COLON NEWLINE stat+;
 
 condicionalElse: ELSE COLON NEWLINE stat+;
 
-// ========================================== 5. EXPRESSÕES ARITMÉTICAS
-// ==========================================
+// ========================================== 6. EXPRESSÕES ARITMÉTICAS E TIPOS DE DADOS (Expandido
+// para Fase 8) ==========================================
 
 expr:
 	expressoesEntreParenteses					# parenExpr
 	| func_call									# funcCallExpr
+	| STRING									# stringExpr
+	| lista										# listExpr
+	| tupla										# tupleExpr
+	| conjunto									# setExpr
+	| dicionario								# dictExpr
 	| <assoc = right> expr POW expr				# powExpr
 	| expr (MULT | DIV | INT_DIV | MOD) expr	# mulDivExpr
 	| expr (PLUS | MINUS) expr					# addSubExpr
@@ -90,7 +90,7 @@ numeros: INT_NUMBER | FLOAT_NUMBER;
 
 expressoesEntreParenteses: LPAREN expr RPAREN;
 
-// ========================================== 6. EXPRESSÕES LÓGICAS / QUERIES
+// ========================================== 7. EXPRESSÕES LÓGICAS / QUERIES
 // ==========================================
 
 query:
