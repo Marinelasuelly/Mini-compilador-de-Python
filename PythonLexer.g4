@@ -19,34 +19,31 @@ LT: '<';
 GTE: '>=';
 LTE: '<=';
 
-// Operadores Booleanos / Bitwise (Símbolos)
+// Operadores Booleanos / Bitwise
 BIT_AND: '&';
 BIT_OR: '|';
 BIT_XOR: '^';
 BIT_NOT: '~';
 
-// Símbolos de Atribuição
+// Atribuição
 ASSIGN: '=';
 ADD_ASSIGN: '+=';
 SUB_ASSIGN: '-=';
 MULT_ASSIGN: '*=';
 DIV_ASSIGN: '/=';
 
-// Símbolos Identificadores de Tipos de Dados (Delimitadores)
-SQUOTE: '\'';
-DQUOTE: '"';
+// Delimitadores
 LBRACK: '[';
 RBRACK: ']';
 LBRACE: '{';
 RBRACE: '}';
 LPAREN: '(';
 RPAREN: ')';
-
-// Símbolo Identificador de Início de Bloco
+COMMA: ',';
 COLON: ':';
+DOT: '.';
 
-// ========================================== 2. PALAVRAS-CHAVE (KEYWORDS)
-// ==========================================
+// ========================================== 2. PALAVRAS-CHAVE ==========================================
 
 // Identificadoras de Blocos
 IF: 'if';
@@ -60,33 +57,18 @@ TRY: 'try';
 EXCEPT: 'except';
 FINALLY: 'finally';
 
-// Tipos de Dados
-INT: 'int';
-FLOAT: 'float';
-STR: 'str';
-BOOL: 'bool';
-LIST: 'list';
-DICT: 'dict';
-TUPLE: 'tuple';
-SET: 'set';
 
-// Funções Built-in
-PRINT: 'print';
-INPUT: 'input';
-LEN: 'len';
-RANGE: 'range';
-TYPE: 'type';
-OPEN: 'open';
-SUM: 'sum';
+// Booleanos
+TRUE: 'True';
+FALSE: 'False';
+NONE: 'None';
 
-// Operadores Booleanos (Palavras)
+// Operadores Booleanos (palavras)
 AND: 'and';
 OR: 'or';
 NOT: 'not';
-TRUE: 'True';
-FALSE: 'False';
 
-// Demais Palavras-chave
+// Demais Keywords
 IMPORT: 'import';
 FROM: 'from';
 IN: 'in';
@@ -96,20 +78,23 @@ PASS: 'pass';
 BREAK: 'break';
 CONTINUE: 'continue';
 IS: 'is';
-NONE: 'None';
 WITH: 'with';
 
-// ========================================== REQUISITO CRUCIAL: REGRAS NO FINAL DO ARQUIVO (Ordem
-// estrita: Identificadores -> Letras -> Dígitos -> WS) ==========================================
+// ========================================== 3. LITERAIS ==========================================
 
-// 1. Identificadores (Nomes de variáveis/funções)
+INT_NUMBER: [0-9]+;
+FLOAT_NUMBER: [0-9]+ '.' [0-9]+;
+
+STRING
+    : '"' (~["\\] | '\\' .)* '"'
+    | '\'' (~['\\] | '\\' .)* '\''
+    ;
+
+// ========================================== 4. IDENTIFICADORES (FINAL DO ARQUIVO) ==========================================
+
 ID: LETTER (LETTER | DIGIT)*;
 
-// 2. Letras
 fragment LETTER: [a-zA-Z_];
-
-// 3. Dígitos
 fragment DIGIT: [0-9];
 
-// 4. Espaços em Branco / Linhas (WS -> skip)
 WS: [ \t\r\n]+ -> skip;
