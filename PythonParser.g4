@@ -8,12 +8,19 @@ options {
 // ==========================================
 
 /**
- * Ponto de entrada do mini-compilador (Atualizado para a Fase 6).
- Aceita instruções,
- * condicionais,
- definições de funções, chamadas ou quebras de linha.
+ * Ponto de entrada do mini-compilador (Atualizado para a Fase 7).
+ Permite instruções,
+ * condicionais, funções, chamadas, loops ou quebras de linha.
  */
-code: (stat | condicional | func | func_call | NEWLINE)* EOF;
+code: (
+		stat
+		| condicional
+		| func
+		| func_call
+		| loop_while
+		| loop_for
+		| NEWLINE
+	)* EOF;
 
 /**
  * Definição de instruções isoladas seguidas por quebra de linha.
@@ -25,35 +32,35 @@ stat: (return_stmt | atribuicao | expr | query) NEWLINE;
  */
 atribuicao: ID ASSIGN expr;
 
-// ========================================== 2. ESTRUTURAS DE FUNÇÕES (FASE 6)
+// ========================================== 2. ESTRUTURAS DE REPETIÇÃO / LOOPS (FASE 7)
 // ==========================================
 
 /**
- * Estrutura de definição de funções: def nome(parametros):
+ * Estrutura de repetição while: while condicao:
  */
+loop_while: WHILE query COLON NEWLINE stat+;
+
+/**
+ * Estrutura de repetição for simplificada: for i in range(x): ou for i in lista:
+ Aceita uma query
+ * ou uma expressão geral após a keyword IN.
+ */
+loop_for: FOR ID IN expr COLON NEWLINE stat+;
+
+// ========================================== 3. ESTRUTURAS DE FUNÇÕES (FASE 6)
+// ==========================================
+
 func: DEF ID LPAREN parametros? RPAREN COLON NEWLINE stat+;
 
-/**
- * Lista opcional de parâmetros separados por vírgula na definição da função.
- */
 parametros: ID (COMMA ID)*;
 
-/**
- * Estrutura de chamada de funções: nome(argumentos)
- */
 func_call: ID LPAREN argumentos? RPAREN;
 
-/**
- * Lista opcional de argumentos (valores ou expressões) separados por vírgula.
- */
 argumentos: expr (COMMA expr)*;
 
-/**
- * Instrução de retorno dentro de funções: return expressao
- */
 return_stmt: RETURN expr;
 
-// ========================================== 3. ESTRUTURAS CONDICIONAIS (FASE 5)
+// ========================================== 4. ESTRUTURAS CONDICIONAIS (FASE 5)
 // ==========================================
 
 condicional:
@@ -65,7 +72,7 @@ condicionalElif: ELIF query COLON NEWLINE stat+;
 
 condicionalElse: ELSE COLON NEWLINE stat+;
 
-// ========================================== 4. EXPRESSÕES ARITMÉTICAS
+// ========================================== 5. EXPRESSÕES ARITMÉTICAS
 // ==========================================
 
 expr:
@@ -83,7 +90,7 @@ numeros: INT_NUMBER | FLOAT_NUMBER;
 
 expressoesEntreParenteses: LPAREN expr RPAREN;
 
-// ========================================== 5. EXPRESSÕES LÓGICAS / QUERIES
+// ========================================== 6. EXPRESSÕES LÓGICAS / QUERIES
 // ==========================================
 
 query:
