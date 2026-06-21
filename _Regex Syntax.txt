@@ -1,0 +1,148 @@
+============
+REGEX sintax (To study)
+============
+
+.
+    Any single character
+    Ex: t.n -> ton, t n, t-k
+
+[chars]
+    Some specifed single character
+    Ex: t[aeiou]n -> ton, tan, tun
+
+(possibility1 | possibility2)
+    Some specified poissibilities
+    Ex: Good (morning | afternoon) -> Good morning, Good afternoon
+
+char*, [chars]*
+    Zero or more of char
+    Ex: c(a*)t -> ct, cat, caat, caaat, etc.
+
+char+, [chars]+
+    One or more times
+
+?, [chars]?
+    Zero or one time
+
+{n}, [chars]{n}
+    Exactly n number of times
+
+{n,}, [chars]{n,}
+    At least n times
+
+{n,m}, [chars]{n,m}
+    At least n but not more than m times
+
+.*
+    All possibilities between left and right chars
+    Ex: c(.*)t -> cat, ct, c t, cart, comic con art
+
+[0-9]
+    Digits
+
+[a-z]
+    Letters
+
+[A-Z]
+    Capital letters
+
+=======================
+Miscelanneous notations
+=======================
+\d
+    Equivalent to [0-9]         Digit character
+
+\D
+    Equivalent to [^0-9]        Non-digit character
+
+\w
+    Equivalent to [a-zA-Z0-9_]  Word character + "_"
+
+\W
+    Equivalent to [^a-zA-Z0-9_] Non-word character
+
+\s
+    Equivalent to [ \t\n\r\f]   Whitespace character
+
+\S
+    Equivalent to [^ \t\n\r\f]  Non-whitespace character
+
+==================
+Special characters
+==================
+\
+    Quote the next metacharacter.
+
+^
+    Match the beginning of the line.
+
+$
+    Match the end of the line.
+
+|
+    Alternation (OR)
+
+( )
+    Grouping
+
+[ ]
+    Character class
+
+================
+Special commands
+================
+??
+    Match 0 or 1 times. Try 0 first, then 1.
+
+*?
+    Match 0 or more times, but as few as possible.
+
++?
+    Match 1 or more times, but as few as possible.
+
+{n}?
+    Match exactly n times. Equivalent to {n}.
+
+{n,}?
+    Match at least n times, but as few as possible.
+
+{n,m}?
+    Match at least n but no more than m times, as few as possible.
+
+word1(?!word2)
+    Any occurrence of word1 that does not have an occurence of word2 after it
+
+(?<=word1)word2
+    Any occurence of word2 that is preceded by word1
+
+(?i)word_or_expression, (?i:pattern)
+    Any occurrence of word_or_expression, regardless of case
+    Ex: (?i)alpha-beta -> alpha-beta, ALPHA-BETA, aLpHa-BetA, and so on.
+        (?i:alpha)-BETA -> aLpHa-BETA, Alpha-BETA, alphA-BETA, and so on.
+
+================
+Precedence order
+================
+Principle 1
+    Taken as a whole, any regular expression will be matched at the earliest possible position in the string.
+
+Principle 2
+    In an alternation a|b|c..., the leftmost alternative that allows a match for the whole regular expression will be the one used.
+
+Principle 3
+    The maximal matching quantifiers ?, *, +, and {n,m} will in general match as much of the string as possible while still allowing the whole regular expression to match.
+
+Principle 4
+    If there are two or more elements in a regular expression, the leftmost greedy quantifier, if any, will match as much of the string as possible while still allowing the whole regular expression to match. The next leftmost greedy quantifier, if any, will try to match as much of the string remaining available to it as possible, while still allowing the whole regular expression to match. And so on, until all the regular expression elements are satisfied.
+
+===========
+Observation
+===========
+    To consider regex sintax symbols, you need put \ before it
+    Ex: [0-9]{2}\-[0-9]{2}\-[0-9]{4} -> 13-11-1990, 10-05-2013
+
+
+=========
+Reference
+=========
+https://support.smartbear.com/alertsite/docs/appendixes/regular-expressions.html

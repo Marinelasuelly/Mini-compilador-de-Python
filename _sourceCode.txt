@@ -1,0 +1,15 @@
+x = 10
+y = 3.5
+z = x + y
+def square(n):
+    return n**2
+result = square(x)
+if result > 50:
+    print(result)
+else:
+    print(z)
+i = 0
+while i < 3:
+    i = i + 1
+for k in range(5):
+    print(k)
