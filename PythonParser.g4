@@ -1,5 +1,4 @@
 parser grammar PythonParser;
-
 options {
 	tokenVocab = PythonLexer;
 }
@@ -12,17 +11,16 @@ stat: expr NEWLINE;
 
 // ------------------------------ EXPRESSÕES ------------------------------
 expr:
-	ids
-	| numeros
-	| operacoesComExpressoes
-	| expressoesEntreParenteses;
+	expressoesEntreParenteses					# parenExpr
+	| <assoc = right> expr POW expr				# operacoesComExpressoes
+	| expr (MULT | DIV | INT_DIV | MOD) expr	# operacoesComExpressoes
+	| expr (PLUS | MINUS) expr					# operacoesComExpressoes
+	| ids										# idExpr
+	| numeros									# numExpr;
 
 // ------------------------------ SUB-REGRAS ------------------------------
 ids: ID;
 
 numeros: INT_NUMBER | FLOAT_NUMBER;
-
-operacoesComExpressoes:
-	expr (PLUS | MINUS | MULT | DIV | MOD | POW) expr;
 
 expressoesEntreParenteses: LPAREN expr RPAREN;
