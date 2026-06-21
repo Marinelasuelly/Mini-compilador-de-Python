@@ -1,22 +1,49 @@
 parser grammar PythonParser;
+
 options {
 	tokenVocab = PythonLexer;
 }
 
-// ------------------------------ REGRA PRINCIPAL ------------------------------
-code: stat* EOF;
+// ========================================== 1. REGRAS PRINCIPAIS DE ENTRADA
+// ==========================================
 
-// ------------------------------ INSTRUÇÕES ------------------------------
-stat: (expr | query) NEWLINE;
+/**
+ * Ponto de entrada do mini-compilador.
+ Permite instruções, condicionais ou quebras de linha vazias
+ * consecutivas.
+ */
+code: (stat | condicional | NEWLINE)* EOF;
 
-// ------------------------------ EXPRESSÕES (ARITMÉTICAS) ------------------------------ A ordem
-// das alternativas define a precedência (primeiro = mais forte). POW > (MULT/DIV/INT_DIV/MOD) >
-// (PLUS/MINUS)
+/**
+ * Definição de instruções isoladas seguidas por quebra de linha.
+ */
+stat: (atribuicao | expr | query) NEWLINE;
+
+/**
+ * Estrutura formal para atribuição de valores a variáveis.
+ */
+atribuicao: ID ASSIGN expr;
+
+// ========================================== 2. ESTRUTURAS CONDICIONAIS (FASE 5)
+// ==========================================
+
+condicional:
+	IF query COLON NEWLINE stat+ (condicionalElif)* (
+		condicionalElse
+	)?;
+
+condicionalElif: ELIF query COLON NEWLINE stat+;
+
+condicionalElse: ELSE COLON NEWLINE stat+;
+
+// ========================================== 3. EXPRESSÕES ARITMÉTICAS
+// ==========================================
+
 expr:
 	expressoesEntreParenteses					# parenExpr
-	| <assoc = right> expr POW expr				# operacoesComExpressoes
-	| expr (MULT | DIV | INT_DIV | MOD) expr	# operacoesComExpressoes
-	| expr (PLUS | MINUS) expr					# operacoesComExpressoes
+	| <assoc = right> expr POW expr				# powExpr
+	| expr (MULT | DIV | INT_DIV | MOD) expr	# mulDivExpr
+	| expr (PLUS | MINUS) expr					# addSubExpr
 	| ids										# idExpr
 	| numeros									# numExpr;
 
@@ -26,13 +53,14 @@ numeros: INT_NUMBER | FLOAT_NUMBER;
 
 expressoesEntreParenteses: LPAREN expr RPAREN;
 
-// ------------------------------ QUERIES (BOOLEANAS / RELACIONAIS) ------------------------------ A
-// ordem das alternativas define a precedência (primeiro = mais forte). NOT > AND > OR
+// ========================================== 4. EXPRESSÕES LÓGICAS / QUERIES
+// ==========================================
+
 query:
 	queryEntreParenteses		# parenQuery
-	| NOT query					# operacoesBooleanasEntreQuerys
-	| query AND query			# operacoesBooleanasEntreQuerys
-	| query OR query			# operacoesBooleanasEntreQuerys
+	| NOT query					# notQuery
+	| query AND query			# andQuery
+	| query OR query			# orQuery
 	| relacoesEntreExpressoes	# relQuery
 	| valoresBooleanos			# boolQuery;
 
