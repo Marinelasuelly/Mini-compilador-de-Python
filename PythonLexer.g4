@@ -57,7 +57,6 @@ TRY: 'try';
 EXCEPT: 'except';
 FINALLY: 'finally';
 
-
 // Booleanos
 TRUE: 'True';
 FALSE: 'False';
@@ -90,11 +89,22 @@ STRING
     | '\'' (~['\\] | '\\' .)* '\''
     ;
 
-// ========================================== 4. IDENTIFICADORES (FINAL DO ARQUIVO) ==========================================
+// ========================================== 4. NOVA LINHA ==========================================
+// Separado do WS para poder ser usado no Parser como terminador de instrução (stat: expr NEWLINE;)
 
+NEWLINE: '\r'? '\n';
+
+// ========================================== REQUISITO CRUCIAL: REGRAS NO FINAL DO ARQUIVO (Ordem
+// estrita: Identificadores -> Letras -> Dígitos -> WS) ==========================================
+
+// 1. Identificadores (Nomes de variáveis/funções)
 ID: LETTER (LETTER | DIGIT)*;
 
+// 2. Letras
 fragment LETTER: [a-zA-Z_];
+
+// 3. Dígitos
 fragment DIGIT: [0-9];
 
-WS: [ \t\r\n]+ -> skip;
+// 4. Espaços em Branco (WS -> skip). Note que '\n' já não está aqui, pois agora tem o seu próprio token (NEWLINE).
+WS: [ \t]+ -> skip;
