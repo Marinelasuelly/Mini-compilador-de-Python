@@ -1,47 +1,28 @@
 parser grammar PythonParser;
 
-options { tokenVocab=PythonLexer; }
+options {
+	tokenVocab = PythonLexer;
+}
 
-// ------------------------------
-// REGRA PRINCIPAL
-// ------------------------------
-code
-    : stat* EOF
-    ;
+// ------------------------------ REGRA PRINCIPAL ------------------------------
+code: stat* EOF;
 
-// ------------------------------
-// INSTRUÇÕES
-// ------------------------------
-stat
-    : expr NEWLINE
-    ;
+// ------------------------------ INSTRUÇÕES ------------------------------
+stat: expr NEWLINE;
 
-// ------------------------------
-// EXPRESSÕES
-// ------------------------------
-expr
-    : ids
-    | numeros
-    | operacoesComExpressoes
-    | expressoesEntreParenteses
-    ;
+// ------------------------------ EXPRESSÕES ------------------------------
+expr:
+	ids
+	| numeros
+	| operacoesComExpressoes
+	| expressoesEntreParenteses;
 
-// ------------------------------
-// SUB-REGRAS
-// ------------------------------
-ids
-    : ID
-    ;
+// ------------------------------ SUB-REGRAS ------------------------------
+ids: ID;
 
-numeros
-    : INT_NUMBER
-    | FLOAT_NUMBER
-    ;
+numeros: INT_NUMBER | FLOAT_NUMBER;
 
-operacoesComExpressoes
-    : expr (PLUS | MINUS | MULT | DIV | MOD | POW) expr
-    ;
+operacoesComExpressoes:
+	expr (PLUS | MINUS | MULT | DIV | MOD | POW) expr;
 
-expressoesEntreParenteses
-    : LPAREN expr RPAREN
-    ;
+expressoesEntreParenteses: LPAREN expr RPAREN;
