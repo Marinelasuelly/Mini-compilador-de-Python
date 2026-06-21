@@ -84,13 +84,13 @@ WITH: 'with';
 INT_NUMBER: [0-9]+;
 FLOAT_NUMBER: [0-9]+ '.' [0-9]+;
 
-STRING
-    : '"' (~["\\] | '\\' .)* '"'
-    | '\'' (~['\\] | '\\' .)* '\''
-    ;
+STRING:
+	'"' (~["\\] | '\\' .)* '"'
+	| '\'' (~['\\] | '\\' .)* '\'';
 
-// ========================================== 4. NOVA LINHA ==========================================
-// Separado do WS para poder ser usado no Parser como terminador de instrução (stat: expr NEWLINE;)
+// ========================================== 4. NOVA LINHA
+// ========================================== Separado do WS para poder ser usado no Parser como
+// terminador de instrução (stat: expr NEWLINE;)
 
 NEWLINE: '\r'? '\n';
 
